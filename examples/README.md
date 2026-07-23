@@ -11,6 +11,9 @@ python examples/base_document.py
 python examples/custom_document.py
 python examples/arbitrary_dto_usage.py
 python examples/dependency_injection_usage.py
+python examples/typed_string_usage.py
+python examples/typed_int_usage.py
+python examples/typed_float_usage.py
 ```
 
 ## Recommended usage
@@ -26,6 +29,16 @@ Use `BaseDocument` for normal persisted documents that need `created_at`,
 
 Use `PersistentDocument` plus timestamp/version mixins when a document needs custom
 metadata layout or a different timestamp precision.
+
+The typed primitive examples place ordinary and constrained variants side by side:
+
+- `typed_string_usage.py` uses `BaseTypedString` and
+  `BaseConstrainedTypedString`.
+- `typed_int_usage.py` uses `BaseTypedInt` and `BaseConstrainedTypedInt`.
+- `typed_float_usage.py` uses `BaseTypedFloat` and `BaseConstrainedTypedFloat`.
+
+All variants preserve their exact domain subtype inside validated DTOs and documents
+and serialize to plain JSON scalar values.
 
 Use `ArbitraryMutableDTO` only at runtime boundaries where the DTO must carry
 objects that Pydantic cannot fully model as data, such as iterators, callbacks,

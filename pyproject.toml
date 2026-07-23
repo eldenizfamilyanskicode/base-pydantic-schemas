@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "base-pydantic-schemas"
-version = "0.1.0"
+version = "0.2.0"
 description = "Small opinionated Pydantic v2 base schemas for DTOs and persistence models, with typed UNIX timestamp support."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -38,6 +38,7 @@ classifiers = [
 dependencies = [
     "base-typed-string",
     "base-typed-int",
+    "base-typed-float",
     "pydantic>=2.6,<3",
     "typed-time-provider",
 ]
@@ -71,6 +72,7 @@ dev = [
 ]
 
 [project.urls]
+Changelog = "https://github.com/eldenizfamilyanskicode/base-pydantic-schemas/blob/main/CHANGELOG.md"
 Homepage = "https://github.com/eldenizfamilyanskicode/base-pydantic-schemas"
 Repository = "https://github.com/eldenizfamilyanskicode/base-pydantic-schemas"
 Issues = "https://github.com/eldenizfamilyanskicode/base-pydantic-schemas/issues"

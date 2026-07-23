@@ -39,6 +39,7 @@ Runtime dependencies:
 ```text
 base-typed-string
 base-typed-int
+base-typed-float
 typed-time-provider
 ```
 
@@ -708,17 +709,44 @@ So undeclared fields are rejected.
 The package is designed to work with semantic primitive wrappers such as:
 
 ```python
-from base_typed_int import BaseTypedInt
-from base_typed_string import BaseTypedString
+from base_typed_float import BaseConstrainedTypedFloat, BaseTypedFloat
+from base_typed_int import BaseConstrainedTypedInt, BaseTypedInt
+from base_typed_string import BaseConstrainedTypedString, BaseTypedString
 from typed_time_provider import Microseconds
 
 
-class UserId(BaseTypedString):
-    """Application user identifier."""
+class DisplayName(BaseTypedString):
+    """Unconstrained semantic display name."""
+
+
+class UserHandle(BaseConstrainedTypedString):
+    """Lowercase public handle with intrinsic format constraints."""
+
+    min_length = 3
+    max_length = 32
+    pattern = r"^[a-z][a-z0-9_]*$"
 
 
 class RetryCount(BaseTypedInt):
-    """Number of retry attempts."""
+    """Unconstrained retry count received from an external source."""
+
+
+class ImportBatchSize(BaseConstrainedTypedInt):
+    """Import batch size accepted by the application."""
+
+    ge = 1
+    le = 1_000
+
+
+class TemperatureCelsius(BaseTypedFloat):
+    """Unconstrained finite temperature in degrees Celsius."""
+
+
+class CompletionRatio(BaseConstrainedTypedFloat):
+    """Completion ratio in the inclusive range from zero to one."""
+
+    ge = 0.0
+    le = 1.0
 
 
 class CreatedAt(Microseconds):
@@ -773,7 +801,7 @@ python -m build
 Current version:
 
 ```text
-0.1.0
+0.2.0
 ```
 
 The public API is intentionally small and stable:

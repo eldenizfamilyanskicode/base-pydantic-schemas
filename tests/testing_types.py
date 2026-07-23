@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
+from base_typed_float import BaseConstrainedTypedFloat, BaseTypedFloat
 from base_typed_int import BaseTypedInt
 from base_typed_string import BaseTypedString
 from typed_time_provider import Microseconds, Milliseconds, Nanoseconds
@@ -47,6 +48,17 @@ class ProfileVersion(BaseTypedInt):
 
 class RetryCount(BaseTypedInt):
     """Outbox or import retry count."""
+
+
+class TemperatureCelsius(BaseTypedFloat):
+    """Finite temperature measured in degrees Celsius."""
+
+
+class CompletionRatio(BaseConstrainedTypedFloat):
+    """Completion ratio in the inclusive range from zero to one."""
+
+    ge = 0.0
+    le = 1.0
 
 
 class RuntimeDatabaseSession:
@@ -101,6 +113,20 @@ class ImmutableUserProfileDTO(ImmutableDTO):
     profile_version: ProfileVersion
 
 
+class MutableMeasurementDTO(MutableDTO):
+    """Mutable measurement DTO with typed float fields."""
+
+    temperature_celsius: TemperatureCelsius
+    completion_ratio: CompletionRatio
+
+
+class ImmutableMeasurementDTO(ImmutableDTO):
+    """Immutable measurement DTO with typed float fields."""
+
+    temperature_celsius: TemperatureCelsius
+    completion_ratio: CompletionRatio
+
+
 class ArbitraryMutableImportJobDTO(ArbitraryMutableDTO):
     """Mutable boundary DTO with runtime-only dependencies."""
 
@@ -124,6 +150,13 @@ class UserProfileDocument(BaseDocument):
     display_name: DisplayName
     city_name: CityName
     profile_version: ProfileVersion = ProfileVersion(1)
+
+
+class MeasurementDocument(BaseDocument):
+    """Persisted measurement document with typed float fields."""
+
+    temperature_celsius: TemperatureCelsius
+    completion_ratio: CompletionRatio
 
 
 class PlainPersistentUserProfileDocument(PersistentDocument):

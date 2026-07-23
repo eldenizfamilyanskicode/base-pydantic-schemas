@@ -47,4 +47,4 @@ __all__: list[str] = [
     "VersionedMixin",
 ]
 
-__version__: str = "0.1.0"
+__version__: str = "0.2.0"
