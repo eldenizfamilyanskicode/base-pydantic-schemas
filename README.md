@@ -34,6 +34,11 @@ Python >= 3.10
 Pydantic >= 2.6,<3
 ```
 
+Release 0.3.0 checks Python 3.10–3.14 with Pydantic 2.14.1, the current stable
+release, and separately checks Python 3.10 with the minimum Pydantic 2.6.0.
+The dependency range remains `pydantic>=2.6,<3`; upstream wheels are not available
+for every Python/Pydantic combination allowed by that range.
+
 Runtime dependencies:
 
 ```text
@@ -104,6 +109,77 @@ from base_pydantic_schemas import (
     UnixNanosecondTimestampedMixin,
     VersionedMixin,
 )
+```
+
+## Deferred schema construction
+
+Ordinary imports keep their existing eager construction behavior:
+
+```python
+from base_pydantic_schemas import MutableDTO, BaseDocument
+```
+
+Opt in when defining models whose validators and serializers may never be used:
+
+```python
+from base_pydantic_schemas.deferred import MutableDTO, BaseDocument
+
+
+class UpdateQuantity(MutableDTO):
+    quantity: int
+
+
+class InventoryDocument(BaseDocument):
+    quantity: int
+```
+
+The deferred namespace exports the same twelve public names. All model bases and
+timestamp/version mixins inherit `ConfigDict(defer_build=True)`. Validation
+policies, timestamp factories, serialization behavior, and the `SchemaVersion`
+type are shared with the ordinary API.
+
+Deferring construction reduces import/startup allocation for unused model
+validators and serializers. That work moves to first use or an explicit build;
+it is not eliminated. Some schema errors also move from class definition to
+first use or build.
+
+Child configuration keeps inherited settings unless explicitly overridden:
+
+```python
+from typing import ClassVar
+
+from pydantic import ConfigDict
+
+
+class NamedCommand(UpdateQuantity):
+    model_config: ClassVar[ConfigDict] = ConfigDict(title="Named command")
+
+
+class EagerCommand(UpdateQuantity):
+    model_config: ClassVar[ConfigDict] = ConfigDict(defer_build=False)
+```
+
+Use an explicit list of application-owned models in application CI to catch
+delayed schema errors. Import or define all referenced models before rebuilding:
+
+```python
+from pydantic import BaseModel
+
+
+application_models: tuple[type[BaseModel], ...] = (
+    UpdateQuantity,
+    InventoryDocument,
+)
+for model in application_models:
+    model.model_rebuild(force=True)
+```
+
+The library's tests cover its bases; application CI must check the application's
+own models and references. See executable examples:
+
+```bash
+python examples/deferred_usage.py
+python examples/deferred_ci_build.py
 ```
 
 ## Model types
@@ -801,7 +877,7 @@ python -m build
 Current version:
 
 ```text
-0.2.0
+0.3.0
 ```
 
 The public API is intentionally small and stable:

@@ -58,7 +58,7 @@ def test_package_public_api_objects_are_reexported_by_identity() -> None:
 
 
 def test_package_version_is_current_public_version() -> None:
-    assert package.__version__ == "0.2.0"
+    assert package.__version__ == "0.3.0"
 
 
 def test_mixins_public_api_exports_expected_names() -> None:

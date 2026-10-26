@@ -14,9 +14,16 @@ python examples/dependency_injection_usage.py
 python examples/typed_string_usage.py
 python examples/typed_int_usage.py
 python examples/typed_float_usage.py
+python examples/deferred_usage.py
+python examples/deferred_ci_build.py
 ```
 
 ## Recommended usage
+
+`deferred_usage.py` opts into deferred DTO/document construction and shows first
+use, inherited configuration, and an explicit eager override.
+`deferred_ci_build.py` builds an explicit list of application-owned models after
+defining their references, so application CI can catch delayed schema errors.
 
 Use `MutableDTO` for command/request objects that can be enriched or normalized before
 a use case is executed.

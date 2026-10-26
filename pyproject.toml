@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "base-pydantic-schemas"
-version = "0.2.0"
+version = "0.3.0"
 description = "Small opinionated Pydantic v2 base schemas for DTOs and persistence models, with typed UNIX timestamp support."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -29,6 +29,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
     "Framework :: Pydantic",
     "Framework :: Pydantic :: 2",
